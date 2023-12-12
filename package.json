@@ -1,0 +1,13 @@
+{
+  "name": "folio",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "setup": "npm i && npx husky install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
+    "husky": "^8.0.3"
+  }
+}
