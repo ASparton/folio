@@ -1,6 +1,7 @@
-mod remote_manager;
+mod error;
+mod remote_controller;
 mod gh_reqwestor;
 
 fn main() {
-    println!("Hello, world!");
+    println!("Hello, world!");    
 }
