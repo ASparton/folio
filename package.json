@@ -5,12 +5,12 @@
 	"author": "Alexandre Sparton<sparton.alexandre@gmail.com>",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/ASparton/count-of-money.git"
+		"url": "git+https://github.com/ASparton/folio.git"
 	},
 	"bugs": {
-		"url": "https://github.com/ASparton/count-of-money/issues"
+		"url": "https://github.com/ASparton/folio/issues"
 	},
-	"homepage": "https://github.com/ASparton/count-of-money#readme",
+	"homepage": "https://github.com/ASparton/folio#readme",
 	"scripts": {
 		"setup": "npm i && npx husky install"
 	},
