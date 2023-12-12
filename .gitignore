@@ -3,3 +3,9 @@
 
 # JS things
 /node_modules
+
+# Environment
+.env
+
+# Visal Studio Code
+.vscode/
