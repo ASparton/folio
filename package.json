@@ -32,9 +32,9 @@
 				"@semantic-release/git",
 				{
 					"assets": [
-						"package.json"
+						"package.json, Cargo.toml"
 					],
-					"message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+					"message": "chore(release): version in Cargo.toml and package.json files updated to ${nextRelease.version} [skip ci]"
 				}
 			]
 		]
