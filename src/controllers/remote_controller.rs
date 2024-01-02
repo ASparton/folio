@@ -1,6 +1,7 @@
 mod model;
 
-use model::{RemotePortfolio, GithubOrganization};
+pub use model::RemotePortfolio;
+use model::GithubOrganization;
 use crate::gh_reqwestor;
 
 const LIST_REMOTES_URL: &str = "https://api.github.com/user/orgs";

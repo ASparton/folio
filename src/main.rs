@@ -1,5 +1,5 @@
 mod error;
-mod remote_controller;
+mod controllers;
 mod gh_reqwestor;
 
 fn main() {

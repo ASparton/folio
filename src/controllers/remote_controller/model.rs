@@ -29,7 +29,7 @@ impl GithubOrganization {
 /// Describes a remote organization used to store portfolio projects.
 #[derive(Debug)]
 pub struct RemotePortfolio {
-    name: String,
+    pub name: String,
 }
 
 impl From<GithubOrganization> for RemotePortfolio {
