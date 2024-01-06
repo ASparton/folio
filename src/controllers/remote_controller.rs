@@ -1,15 +1,15 @@
 mod model;
 
-pub use model::RemotePortfolio;
-use model::GithubOrganization;
 use crate::gh_reqwestor;
+use model::GithubOrganization;
+pub use model::RemotePortfolio;
 
 const LIST_REMOTES_URL: &str = "https://api.github.com/user/orgs";
 
 /// Get the remote portfolios of the current user.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// match get_remotes("gh_token").await {
 ///     Ok(remotes) => println!("Remote portfolios: {:?}", remotes),
@@ -18,6 +18,7 @@ const LIST_REMOTES_URL: &str = "https://api.github.com/user/orgs";
 /// ```
 pub async fn get_remotes(
     gh_auth_token: &str,
+    _args: &Vec<String>,
 ) -> Result<Vec<RemotePortfolio>, crate::error::GhReqwestError> {
     let mut remotes: Vec<RemotePortfolio> = Vec::new();
     let user_orgs: Vec<GithubOrganization> =
