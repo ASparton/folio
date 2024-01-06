@@ -1,4 +1,4 @@
-use crate::command_parser::command::Command;
+use crate::command_parser::command::FolioCommand;
 
 use crate::error::HelpDisplay;
 
@@ -7,11 +7,11 @@ use crate::error::HelpDisplay;
 pub struct CommandsCollection {
     name: String,
     description: String,
-    commands: Vec<Command>,
+    commands: Vec<FolioCommand>,
 }
 
 impl CommandsCollection {
-    pub fn new(name: String, description: String, commands: Vec<Command>) -> CommandsCollection {
+    pub fn new(name: String, description: String, commands: Vec<FolioCommand>) -> CommandsCollection {
         CommandsCollection {
             name,
             description,
@@ -23,8 +23,8 @@ impl CommandsCollection {
         self.name.clone()
     }
 
-    pub fn get_commands(&self) -> Vec<Command> {
-        let mut commands: Vec<Command> = Vec::new();
+    pub fn get_commands(&self) -> Vec<FolioCommand> {
+        let mut commands: Vec<FolioCommand> = Vec::new();
         for command in self.commands.iter() {
             commands.push(command.clone())
         }
@@ -45,7 +45,7 @@ impl HelpDisplay for CommandsCollection {
         let mut help_message: String = format!("{}:\n  {}\n", self.name, self.description);
         help_message.push_str("\nCommands:\n");
         for command in self.commands.iter() {
-            help_message.push_str(format!("  {}", command.get_help()).as_str());
+            help_message.push_str(format!("  {}\n", command.get_help()).as_str());
         }
         help_message
     }

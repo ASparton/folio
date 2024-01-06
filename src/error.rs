@@ -2,7 +2,7 @@ use std::{collections::HashMap, fmt::Display};
 
 use reqwest::StatusCode;
 
-use crate::command_parser::{Command, CommandsCollection};
+use crate::command_parser::{CommandsCollection, FolioCommand};
 
 /// Raised when an error occured during a request to the Github API.
 #[derive(Debug)]
@@ -36,7 +36,7 @@ impl Display for GhReqwestError {
 /// Raised when an error occured when parsing a string into a command.
 pub struct ParseCommandError {
     commands_collection: Option<CommandsCollection>,
-    command: Option<Command>,
+    command: Option<FolioCommand>,
 }
 
 /// Used to display the help the user will see if he uses a command wrongly.
@@ -47,7 +47,7 @@ pub trait HelpDisplay {
 impl ParseCommandError {
     pub fn new(
         commands_collection: Option<CommandsCollection>,
-        command: Option<Command>,
+        command: Option<FolioCommand>,
     ) -> ParseCommandError {
         ParseCommandError {
             commands_collection,
@@ -66,7 +66,8 @@ impl Display for ParseCommandError {
             Some(commands_collection) => match &self.command {
                 None => write!(
                     f,
-                    "Unkown `remote` command.\n{}",
+                    "Unkown `{}` command\n{}",
+                    commands_collection.get_name(),
                     commands_collection.get_help()
                 ),
                 Some(command) => write!(

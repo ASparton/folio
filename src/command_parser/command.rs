@@ -1,19 +1,19 @@
 use crate::error::HelpDisplay;
 
 /// Identify a folio CLI command.
-pub struct Command {
+pub struct FolioCommand {
     name: String,
     description: String,
     verify_args_func: fn(&Vec<&str>) -> bool,
 }
 
-impl Command {
+impl FolioCommand {
     pub fn new(
         name: String,
         description: String,
         verify_args_func: fn(&Vec<&str>) -> bool,
-    ) -> Command {
-        Command {
+    ) -> FolioCommand {
+        FolioCommand {
             name,
             description,
             verify_args_func,
@@ -29,8 +29,8 @@ impl Command {
         (self.verify_args_func)(args)
     }
 
-    pub fn clone(&self) -> Command {
-        Command::new(
+    pub fn clone(&self) -> FolioCommand {
+        FolioCommand::new(
             self.name.clone(),
             self.description.clone(),
             self.verify_args_func.clone(),
@@ -38,7 +38,7 @@ impl Command {
     }
 }
 
-impl HelpDisplay for Command {
+impl HelpDisplay for FolioCommand {
     fn get_help(&self) -> String {
         format!("{}		{}", self.name, self.description)
     }
