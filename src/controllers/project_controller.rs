@@ -17,7 +17,7 @@ pub async fn list_projects_of_remote(
     let repositories: Vec<GithubRepository> =
         gh_reqwestor::get::<Vec<GithubRepository>>(&api_url, gh_auth_token).await?;
     for repository in repositories.into_iter() {
-      projects.push(Project::from(repository));
+        projects.push(Project::from(repository));
     }
     Ok(projects)
 }

@@ -2,6 +2,9 @@ use std::{collections::HashMap, fmt::Display};
 
 use reqwest::StatusCode;
 
+use crate::command_parser::{Command, CommandsCollection};
+
+/// Raised when an error occured during a request to the Github API.
 #[derive(Debug)]
 pub struct GhReqwestError {
     code: StatusCode,
@@ -27,6 +30,53 @@ impl From<reqwest::Error> for GhReqwestError {
 impl Display for GhReqwestError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "Code: {}\nMessage: {}", self.code, self.message)
+    }
+}
+
+/// Raised when an error occured when parsing a string into a command.
+pub struct ParseCommandError {
+    commands_collection: Option<CommandsCollection>,
+    command: Option<Command>,
+}
+
+/// Used to display the help the user will see if he uses a command wrongly.
+pub trait HelpDisplay {
+    fn get_help(&self) -> String;
+}
+
+impl ParseCommandError {
+    pub fn new(
+        commands_collection: Option<CommandsCollection>,
+        command: Option<Command>,
+    ) -> ParseCommandError {
+        ParseCommandError {
+            commands_collection,
+            command,
+        }
+    }
+}
+
+impl Display for ParseCommandError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match &self.commands_collection {
+            None => match &self.command {
+                None => write!(f, "Unknown command. Try 'help' to see available commands."),
+                Some(command) => write!(f, "{}", command.get_help()),
+            },
+            Some(commands_collection) => match &self.command {
+                None => write!(
+                    f,
+                    "Unkown `remote` command.\n{}",
+                    commands_collection.get_help()
+                ),
+                Some(command) => write!(
+                    f,
+                    "{}\n{}",
+                    commands_collection.get_help(),
+                    command.get_help()
+                ),
+            },
+        }
     }
 }
 
