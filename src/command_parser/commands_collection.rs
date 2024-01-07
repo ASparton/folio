@@ -1,9 +1,10 @@
 use crate::command_parser::command::FolioCommand;
 
-use crate::error::HelpDisplay;
+use crate::error::parse_command_error::HelpDisplay;
 
 /// Defines a collection of commands that are related. 
 /// They all act on one kind of object.
+#[derive(Clone)]
 pub struct CommandsCollection {
     name: String,
     description: String,
@@ -29,14 +30,6 @@ impl CommandsCollection {
             commands.push(command.clone())
         }
         commands
-    }
-
-    pub fn clone(&self) -> CommandsCollection {
-        CommandsCollection::new(
-            self.get_name(),
-            self.description.clone(),
-            self.get_commands(),
-        )
     }
 }
 
