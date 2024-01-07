@@ -1,10 +1,9 @@
 use reqwest::header::HeaderMap;
 use serde::de::DeserializeOwned;
 
-pub async fn get<T: DeserializeOwned>(
-    url: &str,
-    gh_auth_token: &str,
-) -> Result<T, crate::error::GhReqwestError> {
+use crate::error::gh_reqwestor_error::GhReqwestError;
+
+pub async fn get<T: DeserializeOwned>(url: &str, gh_auth_token: &str) -> Result<T, GhReqwestError> {
     Ok(reqwest::Client::new()
         .get(url)
         .headers(get_gh_common_headers())

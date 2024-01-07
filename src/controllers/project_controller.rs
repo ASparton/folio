@@ -1,7 +1,7 @@
 mod model;
 
 use crate::controllers::remote_controller::RemotePortfolio;
-use crate::error::GhReqwestError;
+use crate::error::gh_reqwestor_error::GhReqwestError;
 use crate::gh_reqwestor;
 use model::GithubRepository;
 pub use model::Project;

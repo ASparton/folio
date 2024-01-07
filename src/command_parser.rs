@@ -5,7 +5,7 @@ pub use command::FolioCommand;
 pub use commands_collection::CommandsCollection;
 
 use crate::commands_collections;
-use crate::error::ParseCommandError;
+use crate::error::parse_command_error::ParseCommandError;
 
 /// Parse the given input into a folio command.
 ///

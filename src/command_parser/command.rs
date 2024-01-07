@@ -1,6 +1,7 @@
-use crate::error::HelpDisplay;
+use crate::error::parse_command_error::HelpDisplay;
 
 /// Identify a folio CLI command.
+#[derive(Clone)]
 pub struct FolioCommand {
     name: String,
     description: String,
@@ -27,14 +28,6 @@ impl FolioCommand {
     /// Verify if the given arguments are valid for this command.
     pub fn verify_args(&self, args: &Vec<&str>) -> bool {
         (self.verify_args_func)(args)
-    }
-
-    pub fn clone(&self) -> FolioCommand {
-        FolioCommand::new(
-            self.name.clone(),
-            self.description.clone(),
-            self.verify_args_func.clone(),
-        )
     }
 }
 
