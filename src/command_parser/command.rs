@@ -5,14 +5,14 @@ use crate::error::parse_command_error::HelpDisplay;
 pub struct FolioCommand {
     name: String,
     description: String,
-    verify_args_func: fn(&Vec<&str>) -> bool,
+    verify_args_func: fn(&Vec<String>) -> bool,
 }
 
 impl FolioCommand {
     pub fn new(
         name: String,
         description: String,
-        verify_args_func: fn(&Vec<&str>) -> bool,
+        verify_args_func: fn(&Vec<String>) -> bool,
     ) -> FolioCommand {
         FolioCommand {
             name,
@@ -26,7 +26,7 @@ impl FolioCommand {
     }
 
     /// Verify if the given arguments are valid for this command.
-    pub fn verify_args(&self, args: &Vec<&str>) -> bool {
+    pub fn verify_args(&self, args: &Vec<String>) -> bool {
         (self.verify_args_func)(args)
     }
 }
