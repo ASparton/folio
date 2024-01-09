@@ -13,24 +13,42 @@ const REPOS_BASE_URL: &str = "https://api.github.com/repos";
 const RAW_CONTENT_BASE_URL: &str = "https://raw.githubusercontent.com";
 
 pub async fn list_projects_of_remote(
-    remote: &RemotePortfolio,
+    remote_name: &String,
     gh_auth_token: &str,
 ) -> Result<Vec<Project>, GhReqwestError> {
-    let api_url = format!("{}/{}/repos", LIST_ORGANIZATION_REPOS_BASE_URL, remote.name);
+    let api_url = format!("{}/{}/repos", LIST_ORGANIZATION_REPOS_BASE_URL, remote_name);
     let mut projects: Vec<Project> = Vec::new();
     let repositories: Vec<GithubRepository> =
         gh_reqwestor::get::<Vec<GithubRepository>>(&api_url, gh_auth_token).await?;
     for repository in repositories.into_iter() {
-        let mut new_project = Project::from(repository);
-        new_project.set_description(
-            get_project_description(&remote.name, &new_project.get_name(), gh_auth_token).await,
-        );
-        new_project.set_images_url(
-            get_images_url(&remote.name, &new_project.get_name(), gh_auth_token).await,
-        );
-        projects.push(new_project);
+        projects.push(build_project_from_repository(repository, remote_name, gh_auth_token).await);
     }
     Ok(projects)
+}
+
+pub async fn get_project_of_remote(
+    remote_name: &String,
+    project_name: &String,
+    gh_auth_token: &str,
+) -> Result<Project, GhReqwestError> {
+    let api_url = format!("{}/{}/{}", REPOS_BASE_URL, remote_name, project_name);
+    let repository = gh_reqwestor::get::<GithubRepository>(&api_url, gh_auth_token).await?;
+    Ok(Project::from(
+        build_project_from_repository(repository, remote_name, gh_auth_token).await,
+    ))
+}
+
+async fn build_project_from_repository(
+    repository: GithubRepository,
+    remote_name: &String,
+    gh_auth_token: &str,
+) -> Project {
+    let mut project = Project::from(repository);
+    project.set_description(
+        get_project_description(remote_name, &project.get_name(), gh_auth_token).await,
+    );
+    project.set_images_url(get_images_url(remote_name, &project.get_name(), gh_auth_token).await);
+    project
 }
 
 async fn get_project_description(

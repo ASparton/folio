@@ -5,6 +5,7 @@ pub enum FOLIO_COMMAND_ID {
     REMOTE_LIST,
     REMOTE_HELP,
     PROJECT_LIST,
+    PROJECT_VIEW,
     PROJECT_HELP,
 }
 
@@ -47,6 +48,12 @@ fn get_project_commands_collection() -> CommandsCollection {
                 FOLIO_COMMAND_ID::PROJECT_LIST,
                 "list".to_string(),
                 "Lists the projects of the default or specified remote repository".to_string(),
+                |_| true,
+            ),
+            FolioCommand::new(
+                FOLIO_COMMAND_ID::PROJECT_VIEW,
+                "view".to_string(),
+                "View one project of the default or specified remote repository".to_string(),
                 |_| true,
             ),
             FolioCommand::new(
