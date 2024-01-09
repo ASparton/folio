@@ -1,11 +1,15 @@
 mod model;
 
 use crate::error::gh_reqwestor_error::GhReqwestError;
+pub use crate::gh_fetchers::gh_project_fetcher::model::GithubContent;
+use crate::gh_fetchers::gh_project_fetcher::model::TopicsUpdate;
 use crate::gh_reqwestor;
 use model::GithubRepository;
 pub use model::{GithubRepositoryCreation, Project};
-pub use crate::gh_fetchers::gh_project_fetcher::model::GithubContent;
-use crate::gh_fetchers::gh_project_fetcher::model::TopicsUpdate;
+
+use crate::gh_fetchers::gh_project_fetcher::model::{
+    ContentDeletion, ContentUpdate, DeletedContent, UpdatedContent,
+};
 
 const ORGANIZATION_REPOS_BASE_URL: &str = "https://api.github.com/orgs";
 const REPOS_BASE_URL: &str = "https://api.github.com/repos";
@@ -72,7 +76,7 @@ pub async fn update_remote_project(
     ))
 }
 
-pub async fn set_project_topics(
+pub async fn update_project_topics(
     remote_name: &String,
     project_name: &String,
     topics: &Vec<String>,
@@ -85,6 +89,58 @@ pub async fn set_project_topics(
     let updated_topics =
         gh_reqwestor::put::<TopicsUpdate, TopicsUpdate>(&api_url, &body, gh_auth_token).await?;
     Ok(updated_topics)
+}
+
+pub async fn update_project_content(
+    remote_name: &String,
+    project_name: &String,
+    content_path: &String,
+    content_base64: &String,
+    commit_message: &String,
+    file_sha: &Option<String>,
+    gh_auth_token: &str,
+) -> Result<UpdatedContent, GhReqwestError> {
+    let api_url = format!(
+        "{}/{}/{}/contents/{}",
+        REPOS_BASE_URL, remote_name, project_name, content_path
+    );
+    let body = ContentUpdate {
+        content: content_base64.clone(),
+        message: commit_message.clone(),
+        sha: file_sha.clone(),
+    };
+    Ok(gh_reqwestor::put::<ContentUpdate, UpdatedContent>(&api_url, &body, gh_auth_token).await?)
+}
+
+pub async fn delete_project_file(
+    remote_name: &String,
+    project_name: &String,
+    file_path: &String,
+    commit_message: &String,
+    file_sha: &String,
+    gh_auth_token: &str,
+) -> Result<DeletedContent, GhReqwestError> {
+    let api_url = format!(
+        "{}/{}/{}/contents/{}",
+        REPOS_BASE_URL, remote_name, project_name, file_path
+    );
+    let body = ContentDeletion {
+        message: commit_message.clone(),
+        sha: file_sha.clone(),
+    };
+    match gh_reqwestor::delete::<ContentDeletion, DeletedContent>(
+        &api_url,
+        Some(body),
+        gh_auth_token,
+    )
+    .await
+    {
+        Err(error) => {
+            println!("{:?}", error);
+            return Err(GhReqwestError::from(error));
+        }
+        Ok(t) => Ok(t),
+    }
 }
 
 async fn build_project_from_repository(

@@ -24,6 +24,7 @@ pub struct GithubRepository {
 #[derive(Serialize)]
 pub struct GithubRepositoryCreation {
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     pub name: Option<String>,
     pub description: Option<String>,
 }
@@ -32,6 +33,37 @@ pub struct GithubRepositoryCreation {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TopicsUpdate {
     pub names: Vec<String>,
+}
+
+#[derive(Serialize)]
+pub struct ContentUpdate {
+    pub message: String,
+    pub content: String,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    pub sha: Option<String>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct UpdatedContent {
+    content: UpdatedContentInner,
+}
+
+#[derive(Deserialize, Debug)]
+struct UpdatedContentInner {
+    name: String,
+}
+
+#[derive(Serialize)]
+pub struct ContentDeletion {
+    pub message: String,
+    pub sha: String,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct DeletedContent {
+    content: Option<String>
 }
 
 /// Describes a portfolio project.
