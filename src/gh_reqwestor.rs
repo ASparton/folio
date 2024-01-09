@@ -14,6 +14,17 @@ pub async fn get<T: DeserializeOwned>(url: &str, gh_auth_token: &str) -> Result<
         .await?)
 }
 
+pub async fn get_string(url: &str, gh_auth_token: &str) -> Result<String, GhReqwestError> {
+    Ok(reqwest::Client::new()
+        .get(url)
+        .headers(get_gh_common_headers())
+        .bearer_auth(gh_auth_token)
+        .send()
+        .await?
+        .text()
+        .await?)
+}
+
 const COMMON_HEADERS: [(&str, &str); 3] = [
     ("Accept", "application/vnd.github+json"),
     ("X-GitHub-Api-Version", "2022-11-28"),
