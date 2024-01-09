@@ -2,6 +2,12 @@ use std::fmt::Display;
 
 use serde::Deserialize;
 
+/// Github content (file) fields
+#[derive(Deserialize)]
+pub struct GithubContent {
+    pub download_url: String,
+}
+
 /// GitHub reopsitory fields
 #[derive(Deserialize)]
 pub struct GithubRepository {
@@ -27,6 +33,7 @@ pub struct Project {
     topics: Vec<String>,
     stargazers_count: u32,
     watchers_count: u32,
+    images_url: Vec<String>,
 }
 
 impl Project {
@@ -36,6 +43,10 @@ impl Project {
 
     pub fn set_description(&mut self, description: Option<String>) {
         self.description = description;
+    }
+
+    pub fn set_images_url(&mut self, images_url: Vec<String>) {
+        self.images_url = images_url;
     }
 
     fn get_formatted_name(s: &String) -> String {
@@ -82,6 +93,7 @@ impl From<GithubRepository> for Project {
             topics: value.topics,
             stargazers_count: value.stargazers_count,
             watchers_count: value.watchers_count,
+            images_url: Vec::new(),
         }
     }
 }
