@@ -23,7 +23,8 @@ pub struct GithubRepository {
 /// Github repository creation fields
 #[derive(Serialize)]
 pub struct GithubRepositoryCreation {
-    pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
     pub description: Option<String>,
 }
 
