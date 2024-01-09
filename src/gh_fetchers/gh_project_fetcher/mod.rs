@@ -4,8 +4,8 @@ use crate::error::gh_reqwestor_error::GhReqwestError;
 use crate::gh_reqwestor;
 use model::GithubRepository;
 pub use model::{GithubRepositoryCreation, Project};
-
 pub use crate::gh_fetchers::gh_project_fetcher::model::GithubContent;
+use crate::gh_fetchers::gh_project_fetcher::model::TopicsUpdate;
 
 const ORGANIZATION_REPOS_BASE_URL: &str = "https://api.github.com/orgs";
 const REPOS_BASE_URL: &str = "https://api.github.com/repos";
@@ -40,7 +40,7 @@ pub async fn get_project_of_remote(
 pub async fn create_remote_project(
     remote_name: &String,
     project_values: &GithubRepositoryCreation,
-    gh_auth_token: &String,
+    gh_auth_token: &str,
 ) -> Result<Project, GhReqwestError> {
     let api_url = format!("{}/{}/repos", ORGANIZATION_REPOS_BASE_URL, remote_name);
     let created_repo = gh_reqwestor::post::<GithubRepositoryCreation, GithubRepository>(
@@ -52,6 +52,21 @@ pub async fn create_remote_project(
     Ok(Project::from(
         build_project_from_repository(created_repo, remote_name, gh_auth_token).await,
     ))
+}
+
+pub async fn set_project_topics(
+    remote_name: &String,
+    project_name: &String,
+    topics: &Vec<String>,
+    gh_auth_token: &str,
+) -> Result<TopicsUpdate, GhReqwestError> {
+    let api_url = format!("{}/{}/{}/topics", REPOS_BASE_URL, remote_name, project_name);
+    let body = TopicsUpdate {
+        names: topics.clone(),
+    };
+    let updated_topics =
+        gh_reqwestor::put::<TopicsUpdate, TopicsUpdate>(&api_url, &body, gh_auth_token).await?;
+    Ok(updated_topics)
 }
 
 async fn build_project_from_repository(

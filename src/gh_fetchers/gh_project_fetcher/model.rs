@@ -9,7 +9,7 @@ pub struct GithubContent {
 }
 
 /// GitHub reopsitory fields
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct GithubRepository {
     name: String,
     full_name: String,
@@ -25,6 +25,12 @@ pub struct GithubRepository {
 pub struct GithubRepositoryCreation {
     pub name: String,
     pub description: Option<String>,
+}
+
+/// To update topics on a repository
+#[derive(Serialize, Deserialize, Debug)]
+pub struct TopicsUpdate {
+    pub names: Vec<String>,
 }
 
 /// Describes a portfolio project.
