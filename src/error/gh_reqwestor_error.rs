@@ -10,7 +10,6 @@ pub struct GhReqwestError {
 
 impl From<reqwest::Error> for GhReqwestError {
     fn from(error: reqwest::Error) -> Self {
-        println!("{}", error);
         GhReqwestError {
             code: match error.status() {
                 None => StatusCode::FORBIDDEN,
