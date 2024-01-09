@@ -123,6 +123,22 @@ pub async fn delete<I: Serialize, T: DeserializeOwned>(
     Ok(response.json::<T>().await?)
 }
 
+pub async fn plain_delete(url: &str, gh_auth_token: &str) -> Result<bool, reqwest::Error> {
+    match reqwest::Client::new()
+        .delete(url)
+        .headers(get_gh_common_headers())
+        .bearer_auth(gh_auth_token)
+        .send()
+        .await
+    {
+        Err(error) => Err(error),
+        Ok(res) => match res.error_for_status() {
+            Err(error) => Err(error),
+            Ok(res) => Ok(res.status().is_success()),
+        },
+    }
+}
+
 const COMMON_HEADERS: [(&str, &str); 3] = [
     ("Accept", "application/vnd.github+json"),
     ("X-GitHub-Api-Version", "2022-11-28"),

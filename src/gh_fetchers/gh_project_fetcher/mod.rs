@@ -143,6 +143,15 @@ pub async fn delete_project_file(
     }
 }
 
+pub async fn delete_project(
+    remote_name: &String,
+    project_name: &String,
+    gh_auth_token: &str,
+) -> Result<bool, GhReqwestError> {
+    let api_url = format!("{}/{}/{}", REPOS_BASE_URL, remote_name, project_name);
+    Ok(gh_reqwestor::plain_delete(&api_url, gh_auth_token).await?)
+}
+
 async fn build_project_from_repository(
     repository: GithubRepository,
     remote_name: &String,
