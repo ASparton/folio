@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 /// Github content (file) fields
 #[derive(Deserialize)]
@@ -14,20 +14,27 @@ pub struct GithubRepository {
     name: String,
     full_name: String,
     html_url: String,
-    description: String,
+    description: Option<String>,
     stargazers_count: u32,
     watchers_count: u32,
     topics: Vec<String>,
 }
 
+/// Github repository creation fields
+#[derive(Serialize)]
+pub struct GithubRepositoryCreation {
+    pub name: String,
+    pub description: Option<String>,
+}
+
 /// Describes a portfolio project.
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct Project {
     name: String,
     full_name: String,
     formatted_name: String,
     url: String,
-    teaser: String,
+    teaser: Option<String>,
     description: Option<String>,
     cover_url: String,
     topics: Vec<String>,

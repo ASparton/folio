@@ -1,28 +1,60 @@
 use reqwest::header::HeaderMap;
-use serde::de::DeserializeOwned;
+use serde::{de::DeserializeOwned, Serialize};
 
-use crate::error::gh_reqwestor_error::GhReqwestError;
-
-pub async fn get<T: DeserializeOwned>(url: &str, gh_auth_token: &str) -> Result<T, GhReqwestError> {
-    Ok(reqwest::Client::new()
+pub async fn get<T: DeserializeOwned>(url: &str, gh_auth_token: &str) -> Result<T, reqwest::Error> {
+    let response = match reqwest::Client::new()
         .get(url)
         .headers(get_gh_common_headers())
         .bearer_auth(gh_auth_token)
         .send()
-        .await?
-        .json::<T>()
-        .await?)
+        .await
+    {
+        Err(error) => return Err(error),
+        Ok(res) => match res.error_for_status() {
+            Err(error) => return Err(error),
+            Ok(res) => res,
+        },
+    };
+    Ok(response.json::<T>().await?)
 }
 
-pub async fn get_string(url: &str, gh_auth_token: &str) -> Result<String, GhReqwestError> {
-    Ok(reqwest::Client::new()
+pub async fn get_string(url: &str, gh_auth_token: &str) -> Result<String, reqwest::Error> {
+    let response = match reqwest::Client::new()
         .get(url)
         .headers(get_gh_common_headers())
         .bearer_auth(gh_auth_token)
         .send()
-        .await?
-        .text()
-        .await?)
+        .await
+    {
+        Err(error) => return Err(error),
+        Ok(res) => match res.error_for_status() {
+            Err(error) => return Err(error),
+            Ok(res) => res,
+        },
+    };
+    Ok(response.text().await?)
+}
+
+pub async fn post<I: Serialize, T: DeserializeOwned>(
+    url: &str,
+    body: &I,
+    gh_auth_token: &str,
+) -> Result<T, reqwest::Error> {
+    let response = match reqwest::Client::new()
+        .post(url)
+        .headers(get_gh_common_headers())
+        .bearer_auth(gh_auth_token)
+        .json::<I>(&body)
+        .send()
+        .await
+    {
+        Err(error) => return Err(error),
+        Ok(res) => match res.error_for_status() {
+            Err(error) => return Err(error),
+            Ok(res) => res,
+        },
+    };
+    Ok(response.json::<T>().await?)
 }
 
 const COMMON_HEADERS: [(&str, &str); 3] = [

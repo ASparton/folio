@@ -3,11 +3,11 @@ mod model;
 use crate::error::gh_reqwestor_error::GhReqwestError;
 use crate::gh_reqwestor;
 use model::GithubRepository;
-pub use model::Project;
+pub use model::{GithubRepositoryCreation, Project};
 
 pub use crate::gh_fetchers::gh_project_fetcher::model::GithubContent;
 
-const LIST_ORGANIZATION_REPOS_BASE_URL: &str = "https://api.github.com/orgs";
+const ORGANIZATION_REPOS_BASE_URL: &str = "https://api.github.com/orgs";
 const REPOS_BASE_URL: &str = "https://api.github.com/repos";
 const RAW_CONTENT_BASE_URL: &str = "https://raw.githubusercontent.com";
 
@@ -15,7 +15,7 @@ pub async fn list_projects_of_remote(
     remote_name: &String,
     gh_auth_token: &str,
 ) -> Result<Vec<Project>, GhReqwestError> {
-    let api_url = format!("{}/{}/repos", LIST_ORGANIZATION_REPOS_BASE_URL, remote_name);
+    let api_url = format!("{}/{}/repos", ORGANIZATION_REPOS_BASE_URL, remote_name);
     let mut projects: Vec<Project> = Vec::new();
     let repositories: Vec<GithubRepository> =
         gh_reqwestor::get::<Vec<GithubRepository>>(&api_url, gh_auth_token).await?;
@@ -34,6 +34,23 @@ pub async fn get_project_of_remote(
     let repository = gh_reqwestor::get::<GithubRepository>(&api_url, gh_auth_token).await?;
     Ok(Project::from(
         build_project_from_repository(repository, remote_name, gh_auth_token).await,
+    ))
+}
+
+pub async fn create_remote_project(
+    remote_name: &String,
+    project_values: &GithubRepositoryCreation,
+    gh_auth_token: &String,
+) -> Result<Project, GhReqwestError> {
+    let api_url = format!("{}/{}/repos", ORGANIZATION_REPOS_BASE_URL, remote_name);
+    let created_repo = gh_reqwestor::post::<GithubRepositoryCreation, GithubRepository>(
+        api_url.as_str(),
+        project_values,
+        gh_auth_token,
+    )
+    .await?;
+    Ok(Project::from(
+        build_project_from_repository(created_repo, remote_name, gh_auth_token).await,
     ))
 }
 
