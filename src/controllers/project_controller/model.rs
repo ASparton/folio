@@ -22,6 +22,7 @@ pub struct Project {
     formatted_name: String,
     url: String,
     teaser: String,
+    description: Option<String>,
     cover_url: String,
     topics: Vec<String>,
     stargazers_count: u32,
@@ -29,6 +30,14 @@ pub struct Project {
 }
 
 impl Project {
+    pub fn get_name(&self) -> String {
+        return self.name.clone();
+    }
+
+    pub fn set_description(&mut self, description: Option<String>) {
+        self.description = description;
+    }
+
     fn get_formatted_name(s: &String) -> String {
         let mut formatted_name = s.chars().nth(0).unwrap().to_uppercase().to_string();
         match s.get(1..) {
@@ -65,6 +74,7 @@ impl From<GithubRepository> for Project {
             formatted_name: Project::get_formatted_name(&value.name),
             url: value.html_url,
             teaser: value.description,
+            description: None,
             cover_url: format!(
                 "https://raw.githubusercontent.com/{}/master/cover.png",
                 value.full_name
