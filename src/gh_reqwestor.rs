@@ -101,6 +101,28 @@ pub async fn patch<I: Serialize, T: DeserializeOwned>(
     Ok(response.json::<T>().await?)
 }
 
+pub async fn delete<I: Serialize, T: DeserializeOwned>(
+    url: &str,
+    body: Option<I>,
+    gh_auth_token: &str,
+) -> Result<T, reqwest::Error> {
+    let mut request = reqwest::Client::new()
+        .delete(url)
+        .headers(get_gh_common_headers())
+        .bearer_auth(gh_auth_token);
+    if body.is_some() {
+        request = request.json::<I>(&body.unwrap());
+    }
+    let response = match request.send().await {
+        Err(error) => return Err(error),
+        Ok(res) => match res.error_for_status() {
+            Err(error) => return Err(error),
+            Ok(res) => res,
+        },
+    };
+    Ok(response.json::<T>().await?)
+}
+
 const COMMON_HEADERS: [(&str, &str); 3] = [
     ("Accept", "application/vnd.github+json"),
     ("X-GitHub-Api-Version", "2022-11-28"),
