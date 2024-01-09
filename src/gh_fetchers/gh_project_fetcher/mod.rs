@@ -1,12 +1,11 @@
 mod model;
 
-use crate::controllers::remote_controller::RemotePortfolio;
 use crate::error::gh_reqwestor_error::GhReqwestError;
 use crate::gh_reqwestor;
 use model::GithubRepository;
 pub use model::Project;
 
-pub use crate::controllers::project_controller::model::GithubContent;
+pub use crate::gh_fetchers::gh_project_fetcher::model::GithubContent;
 
 const LIST_ORGANIZATION_REPOS_BASE_URL: &str = "https://api.github.com/orgs";
 const REPOS_BASE_URL: &str = "https://api.github.com/repos";
