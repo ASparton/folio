@@ -54,6 +54,24 @@ pub async fn create_remote_project(
     ))
 }
 
+pub async fn update_remote_project(
+    remote_name: &String,
+    project_name: &String,
+    project_values: &GithubRepositoryCreation,
+    gh_auth_token: &str,
+) -> Result<Project, GhReqwestError> {
+    let api_url = format!("{}/{}/{}", REPOS_BASE_URL, remote_name, project_name);
+    let updated_repo = gh_reqwestor::patch::<GithubRepositoryCreation, GithubRepository>(
+        api_url.as_str(),
+        project_values,
+        gh_auth_token,
+    )
+    .await?;
+    Ok(Project::from(
+        build_project_from_repository(updated_repo, remote_name, gh_auth_token).await,
+    ))
+}
+
 pub async fn set_project_topics(
     remote_name: &String,
     project_name: &String,
