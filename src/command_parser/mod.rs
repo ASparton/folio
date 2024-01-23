@@ -20,7 +20,7 @@ use crate::error::parse_command_error::ParseCommandError;
 /// let command = parse_command(&input);
 /// assert!(command.is_err());
 /// ```
-pub fn parse_command(input_args: &Vec<String>) -> Result<FolioCommand, ParseCommandError> {
+pub fn parse_command(input_args: &Vec<String>) -> Result<(CommandsCollection, FolioCommand), ParseCommandError> {
     let targeted_commands_collection = get_targeted_commands_collection(input_args)?;
     let targeted_command =
         get_targeted_command_in_collection(&targeted_commands_collection, input_args)?;
@@ -33,7 +33,7 @@ pub fn parse_command(input_args: &Vec<String>) -> Result<FolioCommand, ParseComm
         ));
     }
 
-    Ok(targeted_command)
+    Ok((targeted_commands_collection, targeted_command))
 }
 
 fn get_targeted_commands_collection(
