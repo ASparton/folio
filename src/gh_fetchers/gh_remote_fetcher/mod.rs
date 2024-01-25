@@ -5,7 +5,6 @@ use crate::gh_reqwestor;
 
 use crate::gh_fetchers::gh_remote_fetcher::models::github_organization::GithubOrganization;
 use crate::gh_fetchers::gh_remote_fetcher::models::github_organization_list_item::GithubOrganizationListItem;
-pub use crate::gh_fetchers::gh_remote_fetcher::models::remote_portfolio::RemotePortfolio;
 
 const LIST_REMOTES_URL: &str = "https://api.github.com/user/orgs";
 const REMOTE_DETAILS_URL: &str = "https://api.github.com/orgs";
@@ -20,8 +19,8 @@ const REMOTE_DETAILS_URL: &str = "https://api.github.com/orgs";
 ///     Err(err) ) => println!("Could not fetch remote portfolios: {:?}", err),
 /// };
 /// ```
-pub async fn get_remotes(gh_auth_token: &str) -> Result<Vec<RemotePortfolio>, GhReqwestError> {
-    let mut remotes: Vec<RemotePortfolio> = Vec::new();
+pub async fn get_remotes(gh_auth_token: &str) -> Result<Vec<GithubOrganization>, GhReqwestError> {
+    let mut remotes: Vec<GithubOrganization> = Vec::new();
     let user_orgs: Vec<GithubOrganizationListItem> =
         gh_reqwestor::get::<Vec<GithubOrganizationListItem>>(&LIST_REMOTES_URL, gh_auth_token)
             .await?;
@@ -47,9 +46,9 @@ pub async fn get_remotes(gh_auth_token: &str) -> Result<Vec<RemotePortfolio>, Gh
 async fn get_remote_from_gh_org_login(
     remote_login: &str,
     gh_auth_token: &str,
-) -> Result<RemotePortfolio, GhReqwestError> {
+) -> Result<GithubOrganization, GhReqwestError> {
     let remote_details_url = format!("{}/{}", REMOTE_DETAILS_URL, remote_login);
     let organization =
         gh_reqwestor::get::<GithubOrganization>(&remote_details_url, gh_auth_token).await?;
-    Ok(RemotePortfolio::from(organization))
+    Ok(GithubOrganization::from(organization))
 }

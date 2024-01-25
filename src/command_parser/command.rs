@@ -1,9 +1,9 @@
-use crate::{commands_collections::FOLIO_COMMAND_ID, error::parse_command_error::HelpDisplay};
+use crate::{commands_collections::FolioCommandId, error::parse_command_error::HelpDisplay};
 
 /// Identify a folio CLI command.
 #[derive(Clone)]
 pub struct FolioCommand {
-    id: FOLIO_COMMAND_ID,
+    id: FolioCommandId,
     name: String,
     description: String,
     verify_args_func: fn(&Vec<String>) -> bool,
@@ -11,7 +11,7 @@ pub struct FolioCommand {
 
 impl FolioCommand {
     pub fn new(
-        id: FOLIO_COMMAND_ID,
+        id: FolioCommandId,
         name: String,
         description: String,
         verify_args_func: fn(&Vec<String>) -> bool,
@@ -24,7 +24,7 @@ impl FolioCommand {
         }
     }
 
-    pub fn get_id(&self) -> FOLIO_COMMAND_ID {
+    pub fn get_id(&self) -> FolioCommandId {
         self.id.clone()
     }
 
