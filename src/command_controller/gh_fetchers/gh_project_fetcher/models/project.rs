@@ -1,7 +1,7 @@
 use serde::Serialize;
 use tabled::Tabled;
 
-use crate::gh_fetchers::gh_project_fetcher::models::github_repository::GithubRepository;
+use crate::command_controller::gh_fetchers::gh_project_fetcher::models::github_repository::GithubRepository;
 
 /// Describes a portfolio project.
 #[derive(Debug, Serialize, Tabled)]
@@ -18,7 +18,7 @@ pub struct Project {
     #[tabled(skip)]
     url: String,
 
-    #[tabled(rename = "Teaser", display_with = "display_string_option")]
+    #[tabled(rename = "Teaser", display_with = "display_croped_string_option")]
     teaser: Option<String>,
 
     #[tabled(skip)]
@@ -60,6 +60,19 @@ fn display_string_vec(vec: &Vec<String>) -> String {
 
 fn display_count(to_count: &Vec<String>) -> String {
     to_count.len().to_string()
+}
+
+fn display_croped_string(to_crop: &String) -> String {
+    let mut s = to_crop.chars().take(50).collect::<String>();
+    s.push_str("...");
+    s
+}
+
+fn display_croped_string_option(to_crop: &Option<String>) -> String {
+    match to_crop {
+        None => "".to_string(),
+        Some(value) => display_croped_string(value),
+    }
 }
 
 impl Project {

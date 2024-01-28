@@ -1,14 +1,14 @@
 mod models;
 
 use crate::error::gh_reqwestor_error::GhReqwestError;
-pub use crate::gh_fetchers::gh_project_fetcher::models::project::Project;
-use crate::gh_fetchers::gh_project_fetcher::models::{
+pub use crate::command_controller::gh_fetchers::gh_project_fetcher::models::project::Project;
+use crate::command_controller::gh_fetchers::gh_project_fetcher::models::{
     content_deletion::ContentDeletion, content_update::ContentUpdate,
     deleted_content::DeletedContent, github_content::GithubContent,
     github_repository::GithubRepository, github_repository_creation::GithubRepositoryCreation,
     topics_update::TopicsUpdate, updated_content::UpdatedContent,
 };
-use crate::gh_reqwestor;
+use crate::command_controller::gh_fetchers::gh_reqwestor;
 
 const ORGANIZATION_REPOS_BASE_URL: &str = "https://api.github.com/orgs";
 const REPOS_BASE_URL: &str = "https://api.github.com/repos";

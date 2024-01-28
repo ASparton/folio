@@ -1,10 +1,12 @@
 mod models;
 
+use crate::command_controller::gh_fetchers::gh_reqwestor;
 use crate::error::gh_reqwestor_error::GhReqwestError;
-use crate::gh_reqwestor;
 
-use crate::gh_fetchers::gh_remote_fetcher::models::github_organization::GithubOrganization;
-use crate::gh_fetchers::gh_remote_fetcher::models::github_organization_list_item::GithubOrganizationListItem;
+use crate::command_controller::gh_fetchers::gh_remote_fetcher::models::{
+    github_organization::GithubOrganization,
+    github_organization_list_item::GithubOrganizationListItem,
+};
 
 const LIST_REMOTES_URL: &str = "https://api.github.com/user/orgs";
 const REMOTE_DETAILS_URL: &str = "https://api.github.com/orgs";

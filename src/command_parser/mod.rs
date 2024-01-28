@@ -1,9 +1,9 @@
 mod command;
 mod commands_collection;
+pub mod gh_token_getter;
+pub mod input_getter;
 
-pub use command::FolioCommand;
-pub use commands_collection::CommandsCollection;
-
+pub use crate::command_parser::{command::FolioCommand, commands_collection::CommandsCollection};
 use crate::commands_collections;
 use crate::error::parse_command_error::ParseCommandError;
 
@@ -20,7 +20,9 @@ use crate::error::parse_command_error::ParseCommandError;
 /// let command = parse_command(&input);
 /// assert!(command.is_err());
 /// ```
-pub fn parse_command(input_args: &Vec<String>) -> Result<(CommandsCollection, FolioCommand), ParseCommandError> {
+pub fn parse_command(
+    input_args: &Vec<String>,
+) -> Result<(CommandsCollection, FolioCommand), ParseCommandError> {
     let targeted_commands_collection = get_targeted_commands_collection(input_args)?;
     let targeted_command =
         get_targeted_command_in_collection(&targeted_commands_collection, input_args)?;

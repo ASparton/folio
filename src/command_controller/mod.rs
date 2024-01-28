@@ -1,9 +1,11 @@
+mod folio_dialoguer;
+mod project_controller;
+mod remote_controller;
+mod gh_fetchers;
+
 use crate::command_parser::CommandsCollection;
 use crate::commands_collections::FolioCommandId;
 use crate::error::folio_error::FolioError;
-
-mod project_controller;
-mod remote_controller;
 
 pub async fn execute_command(
     command_id: &FolioCommandId,
