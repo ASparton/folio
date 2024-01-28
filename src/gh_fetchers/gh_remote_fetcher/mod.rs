@@ -32,6 +32,19 @@ pub async fn get_remotes(gh_auth_token: &str) -> Result<Vec<GithubOrganization>,
     Ok(remotes)
 }
 
+pub async fn get_remotes_name(gh_auth_token: &str) -> Result<Vec<String>, GhReqwestError> {
+    let mut remotes_name: Vec<String> = Vec::new();
+    let user_orgs: Vec<GithubOrganizationListItem> =
+        gh_reqwestor::get::<Vec<GithubOrganizationListItem>>(&LIST_REMOTES_URL, gh_auth_token)
+            .await?;
+    for user_org in user_orgs.into_iter() {
+        if user_org.is_portfolio() {
+            remotes_name.push(user_org.login);
+        }
+    }
+    Ok(remotes_name)
+}
+
 /// Fetch the needed organization information related to the given login and
 /// build a RemotePortfolio object from them.
 ///

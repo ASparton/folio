@@ -1,85 +1,65 @@
-use std::fmt::Display;
+use serde::Serialize;
+use tabled::Tabled;
 
-use serde::{Deserialize, Serialize};
-
-/// Github content (file) fields
-#[derive(Deserialize)]
-pub struct GithubContent {
-    pub download_url: String,
-}
-
-/// GitHub reopsitory fields
-#[derive(Debug, Deserialize)]
-pub struct GithubRepository {
-    name: String,
-    full_name: String,
-    html_url: String,
-    description: Option<String>,
-    stargazers_count: u32,
-    watchers_count: u32,
-    topics: Vec<String>,
-}
-
-/// Github repository creation fields
-#[derive(Serialize)]
-pub struct GithubRepositoryCreation {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
-    pub name: Option<String>,
-    pub description: Option<String>,
-}
-
-/// To update topics on a repository
-#[derive(Serialize, Deserialize, Debug)]
-pub struct TopicsUpdate {
-    pub names: Vec<String>,
-}
-
-#[derive(Serialize)]
-pub struct ContentUpdate {
-    pub message: String,
-    pub content: String,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
-    pub sha: Option<String>,
-}
-
-#[derive(Deserialize, Debug)]
-pub struct UpdatedContent {
-    content: UpdatedContentInner,
-}
-
-#[derive(Deserialize, Debug)]
-struct UpdatedContentInner {
-    name: String,
-}
-
-#[derive(Serialize)]
-pub struct ContentDeletion {
-    pub message: String,
-    pub sha: String,
-}
-
-#[derive(Deserialize, Debug)]
-pub struct DeletedContent {
-    content: Option<String>
-}
+use crate::gh_fetchers::gh_project_fetcher::models::github_repository::GithubRepository;
 
 /// Describes a portfolio project.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Tabled)]
 pub struct Project {
+    #[tabled(skip)]
     name: String,
+
+    #[tabled(skip)]
     full_name: String,
+
+    #[tabled(rename = "Name")]
     formatted_name: String,
+
+    #[tabled(skip)]
     url: String,
+
+    #[tabled(rename = "Teaser", display_with = "display_string_option")]
     teaser: Option<String>,
+
+    #[tabled(skip)]
     description: Option<String>,
+
+    #[tabled(skip)]
     cover_url: String,
+
+    #[tabled(rename = "Topics", display_with = "display_string_vec")]
     topics: Vec<String>,
-    stargazers_count: u32,
-    watchers_count: u32,
+
+    #[tabled(rename = "Images 🖼️", display_with = "display_count")]
     images_url: Vec<String>,
+
+    #[tabled(rename = "Stargazers ⭐")]
+    stargazers_count: u32,
+
+    #[tabled(rename = "Watcher 👀")]
+    watchers_count: u32,
+}
+
+fn display_string_option(option: &Option<String>) -> String {
+    match option {
+        None => "".to_string(),
+        Some(value) => value.to_string(),
+    }
+}
+
+fn display_string_vec(vec: &Vec<String>) -> String {
+    let mut string_vec = String::new();
+    for (i, value) in vec.iter().enumerate() {
+        if i > 0 {
+            string_vec.push_str(", ");
+        }
+        string_vec.push_str(value);
+    }
+    string_vec
+}
+
+fn display_count(to_count: &Vec<String>) -> String {
+    to_count.len().to_string()
 }
 
 impl Project {
@@ -141,15 +121,5 @@ impl From<GithubRepository> for Project {
             watchers_count: value.watchers_count,
             images_url: Vec::new(),
         }
-    }
-}
-
-impl Display for Project {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "{}: {} ⭐ {} 👀",
-            self.formatted_name, self.stargazers_count, self.watchers_count
-        )
     }
 }

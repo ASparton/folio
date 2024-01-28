@@ -17,7 +17,7 @@ pub async fn execute_command(
         FolioCommandId::ProjectHelp => {
             project_controller::display_project_help(commands_collection)
         }
-        FolioCommandId::ProjectList => project_controller::list_projects(),
+        FolioCommandId::ProjectList => project_controller::list_projects(gh_auth_token).await,
         FolioCommandId::ProjectView => project_controller::view_project(),
     }
 }
