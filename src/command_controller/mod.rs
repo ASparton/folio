@@ -18,14 +18,15 @@ pub async fn execute_command(
         FolioCommandId::RemoteList => {
             remote_controller::list_remotes(gh_auth_token, input_args).await
         }
-        FolioCommandId::ProjectHelp => {
-            project_controller::display_project_help(commands_collection)
-        }
         FolioCommandId::ProjectList => {
             project_controller::list_projects(gh_auth_token, input_args).await
         }
         FolioCommandId::ProjectView => {
             project_controller::view_project(gh_auth_token, input_args).await
+        }
+        FolioCommandId::ProjectDelete => project_controller::delete_project(gh_auth_token).await,
+        FolioCommandId::ProjectHelp => {
+            project_controller::display_project_help(commands_collection)
         }
     }
 }

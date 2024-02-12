@@ -16,7 +16,7 @@ impl From<reqwest::Error> for GhReqwestError {
                 Some(status) => status,
             },
             message: match error.status() {
-                None => "No GitHub authentication token provided.".to_string(),
+                None => "No GitHub authentication token provided, or provided token does not have the necessary scopes.".to_string(),
                 Some(status) => get_message_from_satus_code(&status),
             },
         }
