@@ -11,6 +11,14 @@ pub struct FolioError {
     pub message: String,
 }
 
+impl FolioError {
+    pub fn empty_new() -> FolioError {
+        FolioError {
+            message: "".to_string()
+        }
+    }
+}
+
 impl Debug for FolioError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.message)
@@ -44,5 +52,11 @@ impl From<ParseCommandError> for FolioError {
         FolioError {
             message: format!("{}", value),
         }
+    }
+}
+
+impl From<dialoguer::Error> for FolioError {
+    fn from(value: dialoguer::Error) -> Self {
+        FolioError::empty_new()
     }
 }

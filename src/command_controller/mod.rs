@@ -1,9 +1,11 @@
+mod folio_dialoguer;
+mod project_controller;
+mod remote_controller;
+mod gh_fetchers;
+
 use crate::command_parser::CommandsCollection;
 use crate::commands_collections::FolioCommandId;
 use crate::error::folio_error::FolioError;
-
-mod project_controller;
-mod remote_controller;
 
 pub async fn execute_command(
     command_id: &FolioCommandId,
@@ -17,7 +19,7 @@ pub async fn execute_command(
         FolioCommandId::ProjectHelp => {
             project_controller::display_project_help(commands_collection)
         }
-        FolioCommandId::ProjectList => project_controller::list_projects(),
+        FolioCommandId::ProjectList => project_controller::list_projects(gh_auth_token).await,
         FolioCommandId::ProjectView => project_controller::view_project(),
     }
 }
