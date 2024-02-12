@@ -156,7 +156,7 @@ pub async fn delete_project_file(
     }
 }
 
-pub async fn delete_project(
+pub async fn delete_project_of_remote(
     remote_name: &String,
     project_name: &String,
     gh_auth_token: &str,

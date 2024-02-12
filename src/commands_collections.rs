@@ -6,6 +6,7 @@ pub enum FolioCommandId {
     RemoteHelp,
     ProjectList,
     ProjectView,
+    ProjectDelete,
     ProjectHelp,
 }
 
@@ -54,6 +55,12 @@ fn get_project_commands_collection() -> CommandsCollection {
                 FolioCommandId::ProjectView,
                 "view".to_string(),
                 "View one project of the default or specified remote repository".to_string(),
+                |_| true,
+            ),
+            FolioCommand::new(
+                FolioCommandId::ProjectDelete,
+                "delete".to_string(),
+                "Delete one project of the default or specified remote repository".to_string(),
                 |_| true,
             ),
             FolioCommand::new(
