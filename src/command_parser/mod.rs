@@ -2,6 +2,7 @@ mod command;
 mod commands_collection;
 pub mod gh_token_getter;
 pub mod input_getter;
+pub mod input_parser;
 
 pub use crate::command_parser::{command::FolioCommand, commands_collection::CommandsCollection};
 use crate::commands_collections;

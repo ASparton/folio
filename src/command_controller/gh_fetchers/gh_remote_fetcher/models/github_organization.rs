@@ -1,9 +1,11 @@
 use chrono::{DateTime, Utc};
-use serde::Deserialize;
+use serde::{Serialize, Deserialize};
 use tabled::Tabled;
 
+use crate::content_displayer::table_displayer::display_date;
+
 /// Returned when getting the details of one organization of a user
-#[derive(Deserialize, Tabled)]
+#[derive(Serialize, Deserialize, Tabled)]
 pub struct GithubOrganization {
     #[tabled(rename = "Name")]
     pub login: String,
@@ -13,8 +15,4 @@ pub struct GithubOrganization {
 
     #[tabled(rename = "Created 🕰️", display_with = "display_date")]
     pub created_at: DateTime<Utc>,
-}
-
-fn display_date(date: &DateTime<Utc>) -> String {
-    format!("{}", date.date_naive())
 }

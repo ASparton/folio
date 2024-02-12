@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use tabled::{
     settings::{
         height::CellHeightLimit,
@@ -43,6 +44,10 @@ pub fn display_written_length(possible_description: &Option<String>) -> String {
         None => "Not written ❌".to_string(),
         Some(description) => format!("Written ✅ ({} chars)", description.len()),
     }
+}
+
+pub fn display_date(date: &DateTime<Utc>) -> String {
+    format!("{}", date.date_naive())
 }
 
 type FolioTableSettings = Settings<

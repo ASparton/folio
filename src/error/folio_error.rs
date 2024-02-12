@@ -60,3 +60,11 @@ impl From<dialoguer::Error> for FolioError {
         FolioError::empty_new()
     }
 }
+
+impl From<serde_json::Error> for FolioError {
+    fn from(value: serde_json::Error) -> Self {
+        FolioError {
+            message: format!("{}", value),
+        }
+    }
+}

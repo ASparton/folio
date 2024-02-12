@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 reqwest = { version = "0.11.22", features = ["default", "json"] }
 serde = { version = "1.0.193", features = ["derive"] }
+serde_json = { version = "1.0.113", default-features = false, features = ["alloc"] }
 tokio = { version = "1.35.0", features = ["full"] }
 chrono = { version = "0.4", features = ["serde"] }
 dialoguer = { version = "0.11.0", features = ["fuzzy-select"]}
