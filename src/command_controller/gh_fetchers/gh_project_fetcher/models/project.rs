@@ -2,6 +2,7 @@ use serde::Serialize;
 use tabled::Tabled;
 
 use crate::command_controller::gh_fetchers::gh_project_fetcher::models::github_repository::GithubRepository;
+use crate::command_displayer::{display_firsts_string_vec, display_count, display_written_length};
 
 /// Describes a portfolio project.
 #[derive(Debug, Serialize, Tabled)]
@@ -18,19 +19,19 @@ pub struct Project {
     #[tabled(skip)]
     url: String,
 
-    #[tabled(rename = "Teaser", display_with = "display_croped_string_option")]
+    #[tabled(rename = "Teaser ✍️", display_with = "display_written_length")]
     teaser: Option<String>,
 
-    #[tabled(skip)]
+    #[tabled(rename = "Description 📄", display_with = "display_written_length")]
     description: Option<String>,
 
     #[tabled(skip)]
     cover_url: String,
 
-    #[tabled(rename = "Topics", display_with = "display_string_vec")]
+    #[tabled(rename = "Topics 🪧", display_with = "display_firsts_string_vec")]
     topics: Vec<String>,
 
-    #[tabled(rename = "Images 🖼️", display_with = "display_count")]
+    #[tabled(rename = "Illustrations 🖼️", display_with = "display_count")]
     images_url: Vec<String>,
 
     #[tabled(rename = "Stargazers ⭐")]
@@ -40,44 +41,9 @@ pub struct Project {
     watchers_count: u32,
 }
 
-fn display_string_option(option: &Option<String>) -> String {
-    match option {
-        None => "".to_string(),
-        Some(value) => value.to_string(),
-    }
-}
-
-fn display_string_vec(vec: &Vec<String>) -> String {
-    let mut string_vec = String::new();
-    for (i, value) in vec.iter().enumerate() {
-        if i > 0 {
-            string_vec.push_str(", ");
-        }
-        string_vec.push_str(value);
-    }
-    string_vec
-}
-
-fn display_count(to_count: &Vec<String>) -> String {
-    to_count.len().to_string()
-}
-
-fn display_croped_string(to_crop: &String) -> String {
-    let mut s = to_crop.chars().take(50).collect::<String>();
-    s.push_str("...");
-    s
-}
-
-fn display_croped_string_option(to_crop: &Option<String>) -> String {
-    match to_crop {
-        None => "".to_string(),
-        Some(value) => display_croped_string(value),
-    }
-}
-
 impl Project {
     pub fn get_name(&self) -> String {
-        return self.name.clone();
+        self.name.clone()
     }
 
     pub fn set_description(&mut self, description: Option<String>) {

@@ -12,9 +12,37 @@ use terminal_size::{terminal_size, Height as TerminalHeight, Width as TerminalWi
 
 use crate::error::folio_error::FolioError;
 
+const MAX_TABLE_CELL_STRING_VEC_ELEMENTS: usize = 3;
+
 pub fn build_table<I: Tabled>(content: &Vec<I>) -> Result<Table, FolioError> {
-    let settings = build_table_settings()?;
+    let settings: FolioTableSettings = build_table_settings()?;
     Ok(Table::new(content).with(settings).clone())
+}
+
+pub fn display_firsts_string_vec(vec: &Vec<String>) -> String {
+    let mut string_vec = String::new();
+    for (i, value) in vec.iter().enumerate() {
+        if i > 0 {
+            string_vec.push_str(", ");
+        }
+        string_vec.push_str(value);
+        if i == MAX_TABLE_CELL_STRING_VEC_ELEMENTS - 1 {
+            string_vec.push_str(format!(", {} more...", vec.len() - i).as_str());
+            break;
+        }
+    }
+    string_vec
+}
+
+pub fn display_count(to_count: &Vec<String>) -> String {
+    to_count.len().to_string()
+}
+
+pub fn display_written_length(possible_description: &Option<String>) -> String {
+    match possible_description {
+        None => "Not written ❌".to_string(),
+        Some(description) => format!("Written ✅ ({} chars)", description.len()),
+    }
 }
 
 type FolioTableSettings = Settings<
