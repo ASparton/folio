@@ -1,6 +1,5 @@
 mod models;
 
-use crate::error::gh_reqwestor_error::GhReqwestError;
 pub use crate::command_controller::gh_fetchers::gh_project_fetcher::models::project::Project;
 use crate::command_controller::gh_fetchers::gh_project_fetcher::models::{
     content_deletion::ContentDeletion, content_update::ContentUpdate,
@@ -9,6 +8,7 @@ use crate::command_controller::gh_fetchers::gh_project_fetcher::models::{
     topics_update::TopicsUpdate, updated_content::UpdatedContent,
 };
 use crate::command_controller::gh_fetchers::gh_reqwestor;
+use crate::error::gh_reqwestor_error::GhReqwestError;
 
 const ORGANIZATION_REPOS_BASE_URL: &str = "https://api.github.com/orgs";
 const REPOS_BASE_URL: &str = "https://api.github.com/repos";
@@ -26,6 +26,20 @@ pub async fn list_projects_of_remote(
         projects.push(build_project_from_repository(repository, remote_name, gh_auth_token).await);
     }
     Ok(projects)
+}
+
+pub async fn list_projects_name_of_remote(
+    remote_name: &String,
+    gh_auth_token: &str,
+) -> Result<Vec<String>, GhReqwestError> {
+    let api_url = format!("{}/{}/repos", ORGANIZATION_REPOS_BASE_URL, remote_name);
+    let mut projects_name: Vec<String> = Vec::new();
+    let repositories: Vec<GithubRepository> =
+        gh_reqwestor::get::<Vec<GithubRepository>>(&api_url, gh_auth_token).await?;
+    for repository in repositories.into_iter() {
+        projects_name.push(repository.name);
+    }
+    Ok(projects_name)
 }
 
 pub async fn get_project_of_remote(

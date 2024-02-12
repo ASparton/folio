@@ -24,6 +24,8 @@ pub async fn execute_command(
         FolioCommandId::ProjectList => {
             project_controller::list_projects(gh_auth_token, input_args).await
         }
-        FolioCommandId::ProjectView => project_controller::view_project(),
+        FolioCommandId::ProjectView => {
+            project_controller::view_project(gh_auth_token, input_args).await
+        }
     }
 }
