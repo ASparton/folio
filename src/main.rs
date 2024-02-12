@@ -1,5 +1,5 @@
 mod command_controller;
-mod command_displayer;
+mod content_displayer;
 mod command_parser;
 mod commands_collections;
 mod error;

@@ -2,7 +2,7 @@ use serde::Serialize;
 use tabled::Tabled;
 
 use crate::command_controller::gh_fetchers::gh_project_fetcher::models::github_repository::GithubRepository;
-use crate::command_displayer::{display_firsts_string_vec, display_count, display_written_length};
+use crate::content_displayer::table_displayer::{display_firsts_string_vec, display_count, display_written_length};
 
 /// Describes a portfolio project.
 #[derive(Debug, Serialize, Tabled)]
