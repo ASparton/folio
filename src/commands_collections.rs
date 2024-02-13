@@ -18,9 +18,8 @@ pub fn get_all_commands_collections() -> Vec<CommandsCollection> {
 }
 
 fn get_remote_commands_collection() -> CommandsCollection {
-    let collection_name = "remote".to_string();
     CommandsCollection::new(
-        collection_name.clone(),
+        "remote".to_string(),
         "Manage your remote portfolio projects repositories".to_string(),
         vec![
             FolioCommand::new(
@@ -40,9 +39,8 @@ fn get_remote_commands_collection() -> CommandsCollection {
 }
 
 fn get_project_commands_collection() -> CommandsCollection {
-    let collection_name = "project".to_string();
     CommandsCollection::new(
-        collection_name.clone(),
+        "project".to_string(),
         "Manage your portfolio projects".to_string(),
         vec![
             FolioCommand::new(
