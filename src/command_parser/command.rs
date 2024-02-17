@@ -6,6 +6,7 @@ pub struct FolioCommand {
     id: FolioCommandId,
     name: String,
     description: String,
+    usage: String,
     verify_args_func: fn(&Vec<String>) -> bool,
 }
 
@@ -14,12 +15,14 @@ impl FolioCommand {
         id: FolioCommandId,
         name: String,
         description: String,
+        usage: String,
         verify_args_func: fn(&Vec<String>) -> bool,
     ) -> FolioCommand {
         FolioCommand {
             id,
             name,
             description,
+            usage,
             verify_args_func,
         }
     }
@@ -41,5 +44,12 @@ impl FolioCommand {
 impl HelpDisplay for FolioCommand {
     fn get_help(&self) -> String {
         format!("{}		{}", self.name, self.description)
+    }
+
+    fn get_help_and_usage(&self) -> String {
+        format!(
+            "{}		{}\n                Usage: {}",
+            self.name, self.description, self.usage
+        )
     }
 }

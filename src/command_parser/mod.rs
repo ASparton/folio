@@ -23,7 +23,7 @@ use crate::error::parse_command_error::ParseCommandError;
 /// ```
 pub fn parse_command(
     input_args: &Vec<String>,
-) -> Result<(CommandsCollection, FolioCommand), ParseCommandError> {
+) -> Result<(CommandsCollection, FolioCommand, Vec<String>), ParseCommandError> {
     let targeted_commands_collection = get_targeted_commands_collection(input_args)?;
     let targeted_command =
         get_targeted_command_in_collection(&targeted_commands_collection, input_args)?;
@@ -31,19 +31,24 @@ pub fn parse_command(
     let command_args = &input_args.get(2..).unwrap().to_vec();
     if !targeted_command.verify_args(command_args) {
         return Err(ParseCommandError::new(
+            input_args.get(..2).unwrap().join(" "),
             Some(targeted_commands_collection),
             Some(targeted_command),
         ));
     }
 
-    Ok((targeted_commands_collection, targeted_command))
+    Ok((
+        targeted_commands_collection,
+        targeted_command,
+        command_args.clone(),
+    ))
 }
 
 fn get_targeted_commands_collection(
     input_args: &Vec<String>,
 ) -> Result<CommandsCollection, ParseCommandError> {
     if input_args.len() == 0 {
-        return Err(ParseCommandError::new(None, None));
+        return Err(ParseCommandError::new(input_args.join(" "), None, None));
     }
 
     let commands_collections = commands_collections::get_all_commands_collections();
@@ -51,7 +56,7 @@ fn get_targeted_commands_collection(
         .into_iter()
         .find(|collection| collection.get_name().eq(&input_args[0]))
     {
-        None => Err(ParseCommandError::new(None, None)),
+        None => Err(ParseCommandError::new(input_args.join(" "), None, None)),
         Some(collection) => Ok(collection),
     }
 }
@@ -62,6 +67,7 @@ fn get_targeted_command_in_collection(
 ) -> Result<FolioCommand, ParseCommandError> {
     if input_args.len() < 2 {
         return Err(ParseCommandError::new(
+            "".to_string(),
             Some(targeted_commands_collection.clone()),
             None,
         ));
@@ -73,6 +79,7 @@ fn get_targeted_command_in_collection(
         .find(|command| command.get_name().eq(&input_args[1]))
     {
         None => Err(ParseCommandError::new(
+            input_args[1].clone(),
             Some(targeted_commands_collection.clone()),
             None,
         )),

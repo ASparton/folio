@@ -56,7 +56,7 @@ impl From<ParseCommandError> for FolioError {
 }
 
 impl From<dialoguer::Error> for FolioError {
-    fn from(value: dialoguer::Error) -> Self {
+    fn from(_value: dialoguer::Error) -> Self {
         FolioError::empty_new()
     }
 }

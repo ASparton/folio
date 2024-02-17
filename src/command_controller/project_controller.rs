@@ -83,6 +83,11 @@ pub async fn delete_project(gh_auth_token: &String) -> Result<(), FolioError> {
     Ok(())
 }
 
+pub fn new_project(gh_auth_token: &String, input_args: &Vec<String>) -> Result<(), FolioError> {
+    println!("Given path: {}", input_args[0]);
+    Ok(())
+}
+
 async fn ask_remote_name(gh_auth_token: &String) -> Result<String, FolioError> {
     let remotes_name = get_remotes_name(gh_auth_token).await?;
     let selected_remote_index = make_selection(&remotes_name, "Select your remote portfolio:")?;

@@ -18,6 +18,7 @@ pub async fn execute_command(
         FolioCommandId::RemoteList => {
             remote_controller::list_remotes(gh_auth_token, input_args).await
         }
+
         FolioCommandId::ProjectList => {
             project_controller::list_projects(gh_auth_token, input_args).await
         }
@@ -25,6 +26,7 @@ pub async fn execute_command(
             project_controller::view_project(gh_auth_token, input_args).await
         }
         FolioCommandId::ProjectDelete => project_controller::delete_project(gh_auth_token).await,
+        FolioCommandId::ProjectNew => project_controller::new_project(gh_auth_token, input_args),
         FolioCommandId::ProjectHelp => {
             project_controller::display_project_help(commands_collection)
         }
