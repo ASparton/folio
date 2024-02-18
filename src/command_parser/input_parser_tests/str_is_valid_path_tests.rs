@@ -22,6 +22,14 @@ fn test_str_is_valid_path_to_folder_returns_false_when_nonexistent_folder() {
 }
 
 #[test]
+fn test_str_is_valid_path_to_folder_returns_false_when_is_file() {
+    assert_eq!(
+        str_is_valid_path_to_folder(&"./Cargo.toml".to_string()),
+        false
+    );
+}
+
+#[test]
 fn test_str_is_valid_path_to_folder_valid_folder() {
     assert_eq!(
         str_is_valid_path_to_folder(&"/".to_string()),

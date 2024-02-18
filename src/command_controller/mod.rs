@@ -1,5 +1,6 @@
 mod folio_dialoguer;
 mod gh_fetchers;
+mod fs_utils;
 mod project_controller;
 mod remote_controller;
 
@@ -26,7 +27,9 @@ pub async fn execute_command(
             project_controller::view_project(gh_auth_token, input_args).await
         }
         FolioCommandId::ProjectDelete => project_controller::delete_project(gh_auth_token).await,
-        FolioCommandId::ProjectNew => project_controller::new_project(gh_auth_token, input_args),
+        FolioCommandId::ProjectNew => {
+            project_controller::new_project(gh_auth_token, input_args).await
+        }
         FolioCommandId::ProjectHelp => {
             project_controller::display_project_help(commands_collection)
         }

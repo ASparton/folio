@@ -4,9 +4,6 @@ mod commands_collections;
 mod content_displayer;
 mod error;
 
-#[cfg(test)]
-mod tests;
-
 use crate::command_controller::execute_command;
 use crate::command_parser::gh_token_getter::get_gh_token;
 use crate::command_parser::input_getter::get_input_args;
